@@ -4,14 +4,36 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply from: 'ciTask.gradle'
+
+apply plugin: 'com.mindera.gradle.slack'
+buildscript {
+
+    repositories {
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+
+    dependencies {
+        classpath 'com.github.Mindera:gradle-slack-plugin:1.0.7'
+    }
+}
+
+slack {
+    url 'https://hooks.slack.com/services/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'
+    dependsOnTasks 'assemble'
+    title "build finish"
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.myapplication"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersionCode.toInteger()
+        versionName appVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,6 +41,18 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    android.applicationVariants.all { variant ->
+        renameArtifact(variant)
+    }
+}
+
+def renameArtifact(variant) {
+    variant.outputs.all { output ->
+        def fullName = output.outputFile.name
+        def projectName = fullName.substring(0, fullName.indexOf('-'))
+        outputFileName = "${projectName}-${variant.name}-${appVersionName}-${System.getenv("BUILD_NUMBER")}.apk"
     }
 }
 
