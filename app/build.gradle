@@ -23,7 +23,7 @@ buildscript {
 slack {
     url 'https://hooks.slack.com/services/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'
     dependsOnTasks 'assemble'
-    title "build finish"
+    title "https://tikalapks3.s3-us-west-1.amazonaws.com/TikalCiTutorial1/TikalCiTutorial1_Build//${System.getenv("ART_PATH")}/app-debug-${getVersion()['appVersionName']}-${System.getenv("BUILD_NUMBER")}.apk"
 }
 
 android {
