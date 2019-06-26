@@ -26,6 +26,16 @@ slack {
     title "https://tikalapks3.s3-us-west-1.amazonaws.com/TikalCiTutorial1/TikalCiTutorial1_Build//${System.getenv("ART_PATH")}/app-debug-${getVersion()['appVersionName']}-${System.getenv("BUILD_NUMBER")}.apk"
 }
 
+def getVersion(){
+    def versionPropsFile = file('gradle.properties')
+    if (!versionPropsFile.exists()) {
+        versionPropsFile.createNewFile()
+    }
+    def versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    return versionProps
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -55,6 +65,8 @@ def renameArtifact(variant) {
         outputFileName = "${projectName}-${variant.name}-${appVersionName}-${System.getenv("BUILD_NUMBER")}.apk"
     }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
