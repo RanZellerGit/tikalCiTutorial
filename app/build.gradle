@@ -36,6 +36,7 @@ def getVersion(){
     return versionProps
 }
 
+
 android {
     compileSdkVersion 28
     defaultConfig {
